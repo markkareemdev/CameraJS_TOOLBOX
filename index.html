@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>camera_html</title>
+</head>
+
+<body>
+    
+    <!-- //video -->
+
+    <div class= 'video_wrap'>
+        <video id='video' autoplay playsinline ></video>
+    </div>
+
+    <!-- snap -->
+
+    <div class="controller">
+        <button id='snap' >Capture</button>
+    </div>
+
+    <!-- canvas drawing -->
+
+    <canvas id='canvas' width='640' height='480'></canvas>
+
+
+    <!-- script -->
+
+    <script>
+
+        'use strict';
+
+
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const snap = document.getElementById('snap');
+        const errorMessage = document.getElementById('spanErrorMsg');
+
+        const constraints = {
+            audio: true,
+            video: {
+                width: 1280, heigth: 720
+            }
+        }
+
+        function handleSuccess(stream) {
+            window.stream = stream;
+            video.srcObject = stream
+            
+        } 
+
+        
+        async function init(){
+
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia(constraints);
+                handleSuccess(stream);
+            } catch (error) {
+                errorMessage.innerHTML = `The media Error is: ${error.toString()}`
+            }
+        }
+
+        init();
+
+        var context = canvas.getContext('2d');
+        snap.addEventListener('click', function(){
+            context.drawImage(video, 0, 0, 640, 480)
+        })
+
+
+
+    </script>
+
+
+
+</body>
+</html>
